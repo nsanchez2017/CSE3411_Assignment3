@@ -67,7 +67,7 @@ public class UniLifeGameApp extends JFrame implements ActionListener {
     }
 
 
-    public void actionPerformed( ActionEvent evt) {
+    public void actionPerformed(ActionEvent evt) {
         controller.update();
         //if (controller.isGameOver())
             //timer.stop();
