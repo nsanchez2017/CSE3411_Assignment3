@@ -11,7 +11,6 @@ import com.company.model.LifeBar;
 import com.company.model.Student;
 import com.company.model.UniLifeGame;
 
-import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
@@ -72,7 +71,8 @@ public class UniLifeGameAppTest {
 	}
 
 	@Test
-	public void testStudent() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testStudent()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		System.out.println("Testing the Student.");
 		Student student = new Student();
 
@@ -80,15 +80,11 @@ public class UniLifeGameAppTest {
 		drunkStatus.setAccessible(true);
 
 		assertThat("false", is(drunkStatus.get(student).toString()));
-
 		student.changeDrunkStatus(true);
-
 		assertNotEquals("false", drunkStatus.get(student).toString());
-
 		student.changeDrunkStatus(false);
 
 		// get student coordinates
-
 		int expectedX = student.getX();
 
 		// center student
@@ -115,31 +111,47 @@ public class UniLifeGameAppTest {
 	 */
 	@Test
 	public void testFallingObject() {
+		System.out.println("Testing the Falling Object.");
 		FallingObjectType food = FallingObjectType.Food;
 		FallingObject fallingObject = new FallingObject(food, 10);
-		
+
 		assertFalse(fallingObject.isCollected());
 		fallingObject.setCollected();
 		assertTrue(fallingObject.isCollected());
 		assertSame(food, fallingObject.getType());
-		
+
 		assertEquals(0, fallingObject.getY());
 		assertEquals(10, fallingObject.getX());
-		
+
 		fallingObject.fall();
 		assertEquals(15, fallingObject.getY());
-		
+
 		FallingObjectType beer = FallingObjectType.Beer;
 		assertNotSame(food, beer);
 	}
-	
+
 	@Test
 	public void testUniLifeGame() throws NoSuchFieldException, SecurityException {
+		System.out.println("Testing the Uni Life Game.");
 		UniLifeGame game = new UniLifeGame();
+
+		// start game
+		game.keyPressed(32); 
+		assertTrue(game.hasStarted());
+		game.update();
+
+		int studentX = game.getStudent().getX();
+
+		// moving player left
+		game.keyPressed(37);
+		assertEquals(studentX - 10, game.getStudent().getX());
+		// restart game
+		game.keyPressed(82);
+		assertEquals(studentX, game.getStudent().getX());
+		// moving player right
+		game.keyPressed(39);
+		assertEquals(studentX + 10, game.getStudent().getX());
 		
-		Field objects = game.getClass().getDeclaredField("fallingObjects");
-		objects.setAccessible(true);
 		
-//		assertArrayEquals(null, objects);
 	}
 }
